@@ -5,4 +5,4 @@ export MAVEN_HOME=$OPENSHIFT_DATA_DIR/apache-maven-3.3.9
 export PATH=$JAVA_HOME/bin:$MAVEN_HOME/bin:$PATH
 
 cd $OPENSHIFT_REPO_DIR
-mvn package -DskipTests=true > $OPENSHIFT_DATA_DIR/maven.log
+$OPENSHIFT_DATA_DIR/apache-maven-3.3.9/mvn package -DskipTests=true > $OPENSHIFT_LOG_DIR/maven.log

@@ -12,4 +12,4 @@ cd $OPENSHIFT_REPO_DIR
 
 mvn package -DskipTests=true |& /usr/bin/logshifter -tag diy
 
-nohup java -jar target/*.jar --server.port=${OPENSHIFT_DIY_PORT} --server.address=${OPENSHIFT_DIY_IP} |& /usr/bin/logshifter -tag diy &
+nohup java -jar target/*.jar --spring.profiles.active=openshift --server.port=${OPENSHIFT_DIY_PORT} --server.address=${OPENSHIFT_DIY_IP} |& /usr/bin/logshifter -tag diy &

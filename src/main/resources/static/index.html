@@ -1,10 +1,75 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="main">
+
 <head>
     <meta charset="UTF-8">
-    <title>Title</title>
+    <title>Temperature Log</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {'packages':['corechart']});
+    </script>
+
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.8.1/rzslider.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.8.1/rzslider.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.2/moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-moment/1.0.0/angular-moment.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.16.4/lodash.min.js"></script>
+
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <!-- Latest compiled and minified JavaScript -->
+<!--
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+-->
+
+    <link rel="stylesheet" type="text/css" href="css/main.css"/>
+
+    <script src="js/main.module.js"></script>
+    <script src="js/main.controller.js"></script>
+    <script src="js/backend.service.js"></script>
+    <script src="js/chart.service.js"></script>
 </head>
-<body>
-Hello, world!
+
+<body ng-controller="MainController as ctl">
+
+<div style="width: 75%; margin: auto;">
+    <rzslider rz-slider-model="ctl.slider.value" rz-slider-options="ctl.slider.options"></rzslider>
+</div>
+
+<div style="width: 75%; margin-left: auto; margin-right: auto; margin-top: 40px;">
+    <button type="button" ng-click="ctl.submitTemp()" class="btn btn-default btn-lg btn-block" style="width: 25%; margin: auto;">Submit</button>
+
+    <span>{{ctl.lastSubmitted}}</span>
+</div>
+
+<!--
+<div>
+    <button ng-click="ctl.previousWeek()">Previous Week</button>
+    <button ng-click="ctl.nextWeek()">Next Week</button>
+</div>
+
+<div id="weekNavDiv">
+    <span ng-click="ctl.previousWeek()" class="weekNavSpan">Previous Week</span>
+    <span ng-click="ctl.nextWeek()" class="weekNavSpan">Next Week</span>
+</div>
+-->
+
+<div>
+    <div id="chartDiv">
+    </div>
+
+    <ul class="pager">
+        <li><a href="#" ng-click="ctl.previousWeek()"><span aria-hidden="true">&larr;</span> Previous Week</a></li>
+        <li><a href="#" ng-click="ctl.nextWeek()">Next Week <span aria-hidden="true">&rarr;</span></a></li>
+    </ul>
+<!--
+    <nav aria-label="...">
+    </nav>
+-->
+</div>
+
 </body>
 </html>

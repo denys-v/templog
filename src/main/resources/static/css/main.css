@@ -1,0 +1,19 @@
+div#chartDiv {
+    /*position: relative;*/
+    /*left: -100px;*/
+    /*top: -25px;*/
+    /*z-index: -1;*/
+}
+
+div#weekNavDiv {
+    display: inline-table;
+    width: 100%;
+    height: 50px;
+}
+
+span.weekNavSpan {
+    display: inline-table;
+    width: 50%;
+    height: inherit;
+    background-color: lightblue;
+}

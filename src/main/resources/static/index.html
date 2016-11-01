@@ -35,11 +35,11 @@
 
 <body ng-controller="MainController as ctl">
 
-<div style="width: 75%; margin-left: auto; margin-right: auto; margin-top: 50px;">
+<div style="width: 20%; margin-left: auto; margin-right: auto; margin-top: 100px; transform: scale(4);">
     <rzslider rz-slider-model="ctl.slider.value" rz-slider-options="ctl.slider.options"></rzslider>
 </div>
 
-<div style="width: 75%; margin-left: auto; margin-right: auto; margin-top: 50px;">
+<div style="width: 75%; margin-left: auto; margin-right: auto; margin-top: 150px;">
     <span style="font-family: Arial, sans-serif; font-size: 12em; color: blue;">{{ctl.slider.value | number:1}}</span>
 
     <button type="button" ng-click="ctl.submitTemp()" class="btn btn-default btn-lg" style="width: 25%; margin-left: 50px;">Внести</button>

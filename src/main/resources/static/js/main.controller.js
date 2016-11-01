@@ -12,7 +12,8 @@
                 ceil: 39,
                 step: 0.1,
                 precision: 1,
-                showTicksValues: 1
+                showTicksValues: 1,
+                scale: 0.25
             }
         };
 

@@ -9,7 +9,7 @@
             value: 36.6,
             options: {
                 floor: 35,
-                ceil: 41,
+                ceil: 39,
                 step: 0.1,
                 precision: 1,
                 showTicksValues: 1

@@ -14,7 +14,7 @@ public class TempLog {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "temperature", nullable = false)
+    @Column(name = "temperature", nullable = false, precision = 3, scale = 1)
     private BigDecimal temperature;
 
     @Column(name = "taken_at", nullable = false)

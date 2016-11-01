@@ -35,14 +35,16 @@
 
 <body ng-controller="MainController as ctl">
 
-<div style="width: 75%; margin: auto;">
+<div style="width: 75%; margin-left: auto; margin-right: auto; margin-top: 50px;">
     <rzslider rz-slider-model="ctl.slider.value" rz-slider-options="ctl.slider.options"></rzslider>
 </div>
 
-<div style="width: 75%; margin-left: auto; margin-right: auto; margin-top: 40px;">
-    <button type="button" ng-click="ctl.submitTemp()" class="btn btn-default btn-lg btn-block" style="width: 25%; margin: auto;">Submit</button>
+<div style="width: 75%; margin-left: auto; margin-right: auto; margin-top: 50px;">
+    <span style="font-family: Arial, sans-serif; font-size: 12em; color: blue;">{{ctl.slider.value | number:1}}</span>
 
-    <span>{{ctl.lastSubmitted}}</span>
+    <button type="button" ng-click="ctl.submitTemp()" class="btn btn-default btn-lg" style="width: 25%; margin-left: 50px;">Внести</button>
+
+    <span style="margin-left: 50px;">{{ctl.lastSubmitted}}</span>
 </div>
 
 <!--
@@ -62,8 +64,8 @@
     </div>
 
     <ul class="pager">
-        <li><a href="#" ng-click="ctl.previousWeek()"><span aria-hidden="true">&larr;</span> Previous Week</a></li>
-        <li><a href="#" ng-click="ctl.nextWeek()">Next Week <span aria-hidden="true">&rarr;</span></a></li>
+        <li><a href="#" ng-click="ctl.previousWeek()"><span aria-hidden="true">&larr;</span> Пред. неделя</a></li>
+        <li><a href="#" ng-click="ctl.nextWeek()">След. неделя <span aria-hidden="true">&rarr;</span></a></li>
     </ul>
 <!--
     <nav aria-label="...">

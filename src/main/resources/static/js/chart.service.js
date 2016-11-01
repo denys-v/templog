@@ -7,15 +7,22 @@
 
             var rows = [];
 
-            var hiddenStart = [moment(fromDate).subtract(1, 'days').toDate(), null, 36.6, 37];
+            var hiddenStart = [moment(fromDate).subtract(1, 'days').toDate(), null, null, 36.6, 37];
             rows.push(hiddenStart);
 
             _.forEach(logs, function(log) {
-                var row = _.concat(moment(log[0]).toDate(), log[1], null, null);
+                var takenAt = moment(log[0]);
+                var temp = log[1];
+                var tooltip = '<div style="font-size: large; margin: 10px;"><b>' + temp + '&deg;C</b><br/>' +
+                    takenAt.format('D') + '&nbsp;' + takenAt.format('MMM,') + '&nbsp;' + takenAt.format('H:mm') +
+                    '</div>';
+                console.log('Tooltip: ' + tooltip);
+
+                var row = _.concat(takenAt.toDate(), temp, tooltip, null, null);
                 rows.push(row);
             });
 
-            var hiddenEnd = [moment(toDate).add(1, 'days').toDate(), null, 36.6, 37];
+            var hiddenEnd = [moment(toDate).add(1, 'days').toDate(), null, null, 36.6, 37];
             rows.push(hiddenEnd);
 
             // console.log(angular.toJson(rows, true));
@@ -23,6 +30,7 @@
             var data = new google.visualization.DataTable();
             data.addColumn('datetime', 'Time');
             data.addColumn('number', 'Факт. изм.');
+            data.addColumn({'type': 'string', 'role': 'tooltip', 'p': {'html': true}});
             data.addColumn('number', '36.6 C');
             data.addColumn('number', '37 C');
 
@@ -36,6 +44,8 @@
                     // position: 'none'
                 },
                 colors: ['blue', 'green', 'red'],
+                pointSize: 14,
+                tooltip: {isHtml: true},
                 hAxis: {
                     format: 'd/M/yy',
                     viewWindow: {
@@ -59,8 +69,8 @@
                     }
                 },
                 trendlines: {
-                    1: {color: 'green', tooltip: false},
-                    2: {color: 'red', tooltip: false}
+                    1: {color: 'green', tooltip: false, pointsVisible: false, pointSize: 0},
+                    2: {color: 'red', tooltip: false, pointsVisible: false, pointSize: 0}
                 }
             };
 

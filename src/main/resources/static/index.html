@@ -44,7 +44,8 @@
 
     <button type="button" ng-click="ctl.submitTemp()" class="btn btn-default btn-lg" style="width: 25%; margin-left: 50px;">Внести</button>
 
-    <span style="margin-left: 50px;">{{ctl.lastSubmitted}}</span>
+    <span class="text-success" style="margin-left: 50px;" ng-if="ctl.lastSubmitted">{{ctl.lastSubmitted}}</span>
+    <span class="text-danger" style="margin-left: 50px;" ng-if="ctl.error">{{ctl.error}}</span>
 </div>
 
 <!--

@@ -18,21 +18,27 @@
         };
 
         ctl.submitTemp = function() {
-            var temperature = ctl.slider.value;
-            var takenAt = moment().toISOString();
+            ctl.lastSubmitted = null;
+            ctl.error = null;
 
-            backendService.submitLog(temperature, takenAt).then(
+            var temperature = ctl.slider.value;
+            var takenAt = moment();
+
+            backendService.submitLog(temperature, takenAt.toISOString()).then(
                 function success(response) {
-                    console.log('Temperature submitted sucessfully: ' + temperature + ' at ' + takenAt);
+                    console.log('Temperature submitted sucessfully: ' + temperature + ' at ' + takenAt.toISOString());
+
+                    ctl.lastSubmitted = 'Submitted: ' + temperature + ' at ' + takenAt.format('DD MMM, HH:mm');
 
                     ctl.updateChart();
                 },
                 function error(response) {
                     console.log('Error submitting temperature:');
-                    console.log(angular.toJson(data, true));
+                    console.log(angular.toJson(response, true));
+
+                    ctl.error = response.data.error + ': ' + response.data.message;
                 }
             );
-            ctl.lastSubmitted = 'Submitted: ' + temperature + ' at ' + takenAt;
         };
 
         // Initially set Base Date to current date

@@ -10,6 +10,7 @@
     </script>
 
     <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.8.1/rzslider.min.css"/>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.8/angular.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angularjs-slider/5.8.1/rzslider.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.2/moment.min.js"></script>
@@ -21,9 +22,7 @@
     <!-- Optional theme -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <!-- Latest compiled and minified JavaScript -->
-<!--
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
--->
 
     <link rel="stylesheet" type="text/css" href="css/main.css"/>
 
@@ -40,7 +39,9 @@
 </div>
 
 <div style="width: 75%; margin-left: auto; margin-right: auto; margin-top: 150px;">
-    <span style="font-family: Arial, sans-serif; font-size: 12em; color: blue;">{{ctl.slider.value | number:1}}</span>
+    <span style="font-family: Arial, sans-serif; font-size: 12em; color: blue;">
+        <span ng-cloak>{{ctl.slider.value | number:1}}</span>
+    </span>
 
     <button type="button" ng-click="ctl.submitTemp()" class="btn btn-default btn-lg" style="width: 25%; margin-left: 50px;">Внести</button>
 
@@ -60,6 +61,7 @@
 </div>
 -->
 
+<!--
 <div>
     <div id="chartDiv">
     </div>
@@ -68,10 +70,25 @@
         <li><a href="#" ng-click="ctl.previousWeek()"><span aria-hidden="true">&larr;</span> Пред. неделя</a></li>
         <li><a href="#" ng-click="ctl.nextWeek()">След. неделя <span aria-hidden="true">&rarr;</span></a></li>
     </ul>
-<!--
-    <nav aria-label="...">
-    </nav>
+</div>
 -->
+
+<div id="chartCarousel" class="carousel slide">
+    <div class="carousel-inner" role="listbox">
+        <div class="item active">
+            <div id="chartDiv">
+            </div>
+        </div>
+    </div>
+    <!-- Controls -->
+    <a class="left carousel-control" href="#chartCarousel" role="button" data-slide="prev" ng-click="ctl.previousWeek()">
+        <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="right carousel-control" href="#chartCarousel" role="button" data-slide="next" ng-click="ctl.nextWeek()">
+        <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
 </div>
 
 </body>

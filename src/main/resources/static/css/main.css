@@ -17,3 +17,8 @@ span.weekNavSpan {
     height: inherit;
     background-color: lightblue;
 }
+
+.carousel-control.left, .carousel-control.right {
+    color: #cccccc;
+    background-image: none !important;
+}

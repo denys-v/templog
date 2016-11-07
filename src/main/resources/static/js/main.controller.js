@@ -71,6 +71,10 @@
             );
         };
 
+        $('#chartCarousel').carousel({
+            interval: false
+        });
+
         $timeout(function () {
             ctl.updateChart();
         }, 1000);

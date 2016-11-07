@@ -16,7 +16,7 @@
                 var tooltip = '<div style="font-size: large; margin: 10px;"><b>' + temp + '&deg;C</b><br/>' +
                     takenAt.format('D') + '&nbsp;' + takenAt.format('MMM,') + '&nbsp;' + takenAt.format('H:mm') +
                     '</div>';
-                console.log('Tooltip: ' + tooltip);
+                // console.log('Tooltip: ' + tooltip);
 
                 var row = _.concat(takenAt.toDate(), temp, tooltip, null, null);
                 rows.push(row);

@@ -26,7 +26,7 @@
 
             backendService.submitLog(temperature, takenAt.toISOString()).then(
                 function success(response) {
-                    console.log('Temperature submitted sucessfully: ' + temperature + ' at ' + takenAt.toISOString());
+                    // console.log('Temperature submitted sucessfully: ' + temperature + ' at ' + takenAt.toISOString());
 
                     ctl.lastSubmitted = 'Submitted: ' + temperature + ' at ' + takenAt.format('DD MMM, HH:mm');
 
@@ -60,8 +60,8 @@
 
             backendService.getLogs(fromDate.toISOString(), toDate.toISOString()).then(
                 function success(data) {
-                    console.log('Logs got successfully:');
-                    console.log(angular.toJson(data, true));
+                    // console.log('Logs got successfully:');
+                    // console.log(angular.toJson(data, true));
 
                     chartService.drawChart(fromDate.toDate(), toDate.toDate(), data);
                 }, function error(response) {

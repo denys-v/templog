@@ -3,8 +3,15 @@
     chartService.$inject = ['moment'];
     function chartService(moment) {
 
-        this.drawChart = function(fromDate, toDate, logs) {
+        var self = this;
 
+        /**
+         * To display temperature log data in the chart.
+         * @param fromDate
+         * @param toDate
+         * @param logs
+         */
+        self.drawChart = function(fromDate, toDate, logs) {
             var rows = [];
 
             var hiddenStart = [moment(fromDate).subtract(1, 'days').toDate(), null, null, 36.6, 37];
@@ -36,46 +43,78 @@
 
             data.addRows(rows);
 
-            var options = {
-                title: 'Внесенные измерения температуры',
-                // width: 900,
-                height: 800,
-                legend: {
-                    // position: 'none'
-                },
-                colors: ['blue', 'green', 'red'],
-                pointSize: 14,
-                tooltip: {isHtml: true},
-                hAxis: {
-                    format: 'd/M/yy',
-                    viewWindow: {
-                        min: fromDate,
-                        max: toDate
-                    },
-                    gridlines: {
-                        count: -1,
-                        units: {
-                            days: {format: ['d MMM']}
-                        }
-                    }
-                },
-                vAxis: {
-                    viewWindow: {
-                        min: 35,
-                        max: 39
-                    },
-                    gridlines: {
-                        count: 5
-                    }
-                },
-                trendlines: {
-                    1: {color: 'green', tooltip: false, pointsVisible: false, pointSize: 0},
-                    2: {color: 'red', tooltip: false, pointsVisible: false, pointSize: 0}
-                }
-            };
+            chartOptions.hAxis.viewWindow.min = fromDate;
+            chartOptions.hAxis.viewWindow.max = toDate;
 
-            var chart = new google.visualization.ScatterChart(document.getElementById('chartDiv'));
-            chart.draw(data, options);
+            getChart().draw(data, chartOptions);
+        };
+
+        /**
+         * Internal reference to chart instance - shouldn't be used directly, but via the getChart() accessor.
+         * @type {null}
+         */
+        var chart = null;
+
+        /**
+         * Creates the chart object on first call and uses it afterwards.
+         * @returns {*}
+         */
+        var getChart = function() {
+            if (chart == null) {
+                chart = new google.visualization.ScatterChart(document.getElementById('chartDiv'));
+                // google.visualization.events.addListener(chart, 'select', function (e) {
+                //     console.log('Select:');
+                //     console.log(self.chart.getSelection());
+                // });
+                // google.visualization.events.addListener(chart, 'click', function (e) {
+                //     console.log('Click:');
+                //     console.log(e);
+                // });
+            }
+
+            return chart;
+        };
+
+        /**
+         * Chart options template.
+         * @type {{title: string, height: number, legend: {}, colors: string[], pointSize: number, tooltip: {isHtml: boolean}, hAxis: {format: string, viewWindow: {min: null, max: null}, gridlines: {count: number, units: {days: {format: string[]}}}}, vAxis: {viewWindow: {min: number, max: number}, gridlines: {count: number}}, trendlines: {1: {color: string, tooltip: boolean, pointsVisible: boolean, pointSize: number}, 2: {color: string, tooltip: boolean, pointsVisible: boolean, pointSize: number}}}}
+         */
+        var chartOptions = {
+            title: 'Внесенные измерения температуры',
+            // width: 900,
+            height: 800,
+            legend: {
+                // position: 'none'
+            },
+            colors: ['blue', 'green', 'red'],
+            pointSize: 14,
+            tooltip: {isHtml: true},
+            hAxis: {
+                format: 'd/M/yy',
+                viewWindow: {
+                    min: null, // to be set before drawing
+                    max: null  // to be set before drawing
+                },
+                gridlines: {
+                    count: -1,
+                    units: {
+                        days: {format: ['d MMM']}
+                    }
+                }
+            },
+            vAxis: {
+                viewWindow: {
+                    min: 35,
+                    max: 39
+                },
+                gridlines: {
+                    count: 5
+                }
+            },
+            trendlines: {
+                1: {color: 'green', tooltip: false, pointsVisible: false, pointSize: 0},
+                2: {color: 'red', tooltip: false, pointsVisible: false, pointSize: 0}
+            }
         };
     }
 

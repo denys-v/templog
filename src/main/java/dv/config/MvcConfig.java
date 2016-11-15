@@ -24,7 +24,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter{
         CustomRequestLoggingFilter f = new CustomRequestLoggingFilter();
         f.setIncludeQueryString(true);
         f.setIncludeHeaders(true);
-        f.includeHeaders("authorization", "content-type", "content-length", "accept");
+//        f.includeHeaders("authorization", "content-type", "content-length", "accept");
         f.setIncludeClientInfo(true);
         f.setIncludePayload(true);
         f.setMaxPayloadLength(1000);

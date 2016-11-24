@@ -1,0 +1,27 @@
+<div class="modal-header">
+    <h3 class="modal-title" id="modal-title">Вход в систему</h3>
+    <div ng-click="$dismiss()" class="close-button pull-right"></div>
+</div>
+
+<form ng-submit="ctl.submit()">
+    <div class="modal-body" id="modal-body">
+        <div class="form-group">
+            <label for="username">Имя пользователя</label>
+            <input type="text" id="username" ng-model="ctl.credentials.username" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label for="password">Пароль</label>
+            <input type="password" id="password" ng-model="ctl.credentials.password" class="form-control"/>
+        </div>
+        <div class="form-group">
+            <label for="rememberme">Запомнить</label>
+            <input type="checkbox" id="rememberme" ng-model="ctl.credentials.rememberme"/>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div style="display: table; table-layout: fixed;">
+            <button class="btn btn-default" type="submit" style="display: table-cell;">Вход</button>
+            <span class="text-danger" style="display: table-cell; vertical-align: middle; padding-left: 10px;" ng-if="ctl.error">{{ctl.error}}</span>
+        </div>
+    </div>
+</form>

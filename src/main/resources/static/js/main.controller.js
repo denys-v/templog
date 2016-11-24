@@ -1,7 +1,7 @@
 ;(function () {
 
-    MainController.$inject = ['$timeout', 'moment', 'backendService', 'chartService'];
-    function MainController($timeout, moment, backendService, chartService) {
+    MainController.$inject = ['$timeout', '$q', 'moment', 'backendService', 'chartService', 'securityContext', 'loginDialog'];
+    function MainController($timeout, $q, moment, backendService, chartService, securityContext, loginDialog) {
 
         var ctl = this;
 
@@ -17,46 +17,64 @@
             }
         };
 
-        ctl.submitTemp = function() {
+        ctl.submitTempClick = function () {
             ctl.lastSubmitted = null;
             ctl.error = null;
 
             var temperature = ctl.slider.value;
             var takenAt = moment();
 
-            backendService.submitLog(temperature, takenAt.toISOString()).then(
-                function success(response) {
-                    // console.log('Temperature submitted sucessfully: ' + temperature + ' at ' + takenAt.toISOString());
-
-                    ctl.lastSubmitted = 'Submitted: ' + temperature + ' at ' + takenAt.format('DD MMM, HH:mm');
-
-                    ctl.updateChart();
-                },
+            backendService.submitLog(temperature, takenAt.toISOString()).catch(
                 function error(response) {
-                    console.log('Error submitting temperature:');
-                    console.log(angular.toJson(response, true));
-
-                    ctl.error = response.data.error + ': ' + response.data.message;
+                    if (response.status == 401 || response.status == 403) {
+                        return loginDialog.login().then(function loginSuccessful() {
+                            return backendService.submitLog(temperature, takenAt.toISOString());
+                        }, function loginCancelled() {
+                            return $q.reject(response); // return 'upper' response - to be logged
+                        });
+                    } else {
+                        return $q.reject(response);
+                    }
                 }
-            );
+            ).then(function success() {
+                ctl.lastSubmitted = 'Внесена температура: ' + temperature +
+                    ' at ' + takenAt.format('DD MMM, HH:mm');
+                ctl.updateChart();
+            }, function error(response) {
+                setSubmitError(response);
+            });
         };
 
+        function setSubmitError(response) {
+            if (response.status == 401) {
+                ctl.error = 'Для внесения показаний требуется вход в систему';
+            } else if (response.status == 403) {
+                ctl.error = 'Недостаточно полномочий для внесения показаний';
+            } else {
+                if (response.data != undefined) {
+                    ctl.error = 'Ошибка: ' +
+                        (response.data.error ? response.data.error : '') +
+                        (response.data.message ? ': ' + response.data.message : '');
+                }
+            }
+        }
+
         // Initially set Base Date to current date
-        ctl.baseDate = moment().hour(0).minute(0).second(0).millisecond(0);
+        var baseDate = moment().hour(0).minute(0).second(0).millisecond(0);
 
         ctl.previousWeek = function() {
-            ctl.baseDate = moment(ctl.baseDate).subtract(7, 'days');
+            baseDate = moment(baseDate).subtract(7, 'days');
             ctl.updateChart();
         };
 
         ctl.nextWeek = function() {
-            ctl.baseDate = moment(ctl.baseDate).add(7, 'days');
+            baseDate = moment(baseDate).add(7, 'days');
             ctl.updateChart();
         };
 
         ctl.updateChart = function() {
-            var fromDate = moment(ctl.baseDate).subtract(6, 'days'); //.toDate();//new Date(2016, 9, 25);
-            var toDate = moment(ctl.baseDate).add(1, 'days'); //.toDate();//new Date(2016, 10, 1);
+            var fromDate = moment(baseDate).subtract(6, 'days'); //.toDate();//new Date(2016, 9, 25);
+            var toDate = moment(baseDate).add(1, 'days'); //.toDate();//new Date(2016, 10, 1);
 
             backendService.getLogs(fromDate.toISOString(), toDate.toISOString()).then(
                 function success(data) {

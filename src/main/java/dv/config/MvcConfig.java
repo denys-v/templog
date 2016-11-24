@@ -36,7 +36,7 @@ public class MvcConfig extends WebMvcConfigurerAdapter{
         FilterRegistrationBean b = new FilterRegistrationBean();
         b.setFilter(f);
         b.setOrder(Ordered.HIGHEST_PRECEDENCE);
-        b.setUrlPatterns(Arrays.asList("/", "/templog/*"));
+        b.setUrlPatterns(Arrays.asList("/", "/login", "/logout", "/after_logout", "/templog/*"));
 
         return b;
     }

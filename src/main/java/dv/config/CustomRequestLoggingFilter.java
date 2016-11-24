@@ -53,8 +53,9 @@ public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
         if (request.getParameterMap().size() > 0) {
             msg.append("\nParameters:");
             request.getParameterMap().forEach((s, strings) -> {
-                msg.append("\n").append("- ").append(s).append(": ")
-                        .append(Arrays.stream(strings).collect(Collectors.joining(", ", "[", "]")));
+                msg.append("\n").append("- ").append(s).append(": ");
+                msg.append(Arrays.stream(strings)
+                        .collect(Collectors.joining("\", \"", "[\"", "\"]")));
             });
         }
 
@@ -85,10 +86,16 @@ public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
             new ServletServerHttpRequest(request).getHeaders().forEach((s, strings) -> {
                 if (this.includedHeaders.size() > 0) {
                     if (this.includedHeaders.contains(s)) {
-                        msg.append('\n').append("- ").append(s).append(": ").append(strings);
+                        msg.append('\n').append("- ").append(s).append(": ");
+                        msg.append(strings
+                                .stream()
+                                .collect(Collectors.joining("\", \"", "[\"", "\"]")));
                     }
                 } else {
-                    msg.append('\n').append("- ").append(s).append(": ").append(strings);
+                    msg.append('\n').append("- ").append(s).append(": ");
+                    msg.append(strings
+                            .stream()
+                            .collect(Collectors.joining("\", \"", "[\"", "\"]")));
                 }
             });
         }
@@ -118,9 +125,11 @@ public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
             if (response.getHeaderNames().size() > 0) {
                 b.append("\nRESPONSE\n--------\nStatus: ").append(response.getStatus());
                 b.append("\nHeaders:");
-                response.getHeaderNames().forEach(s -> {
+                response.getHeaderNames().stream().distinct().forEach(s -> {
                     b.append("\n- ").append(s).append(": ");
-                    b.append(response.getHeaders(s).stream().collect(Collectors.joining(", ", "[", "]")));
+                    b.append(response.getHeaders(s)
+                            .stream()
+                            .collect(Collectors.joining("\", \"", "[\"", "\"]")));
                 });
             }
             if (b.length() > 0) {
@@ -133,7 +142,9 @@ public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
+                                    FilterChain filterChain) throws ServletException, IOException {
         this.localResponse.set(response);
 
         try {

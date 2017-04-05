@@ -21,8 +21,12 @@ public class TempLogController {
 
     private static final Logger log = LoggerFactory.getLogger(TempLogController.class);
 
+    private final TempLogRepository tempLogRepository;
+
     @Autowired
-    private TempLogRepository tempLogRepository;
+    public TempLogController(TempLogRepository tempLogRepository) {
+        this.tempLogRepository = tempLogRepository;
+    }
 
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
     public void submitLog(@RequestBody TempLogDTO dto) {

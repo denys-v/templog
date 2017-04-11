@@ -1,5 +1,6 @@
 package dv.config;
 
+import dv.util.spring.mvc.CustomRequestLoggingFilter;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

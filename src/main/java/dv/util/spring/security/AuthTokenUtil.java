@@ -1,4 +1,4 @@
-package dv.config;
+package dv.util.spring.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

@@ -1,4 +1,4 @@
-package dv.config;
+package dv.util.spring.mvc;
 
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.StringUtils;

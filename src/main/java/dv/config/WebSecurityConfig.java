@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -73,12 +74,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         });
 
         // standard "remember me" disabled
-        // TODO: implement "remember me" functionality within token-based security
+        // TODO: implement "remember me" functionality within token-based auth
 //        http.rememberMe()
 //                .rememberMeParameter("remember-me").rememberMeCookieName("remember-me")
 //                .tokenValiditySeconds(5*60);
 
-        // CSRF disabled because of token-based security usage
+        // CSRF disabled because of token-based auth usage
         http.csrf().disable();
 //                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
@@ -87,7 +88,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
 
-//    /* Commented out - session usage replaced with JWT token security. */
+    @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/**/*.html", "/js/**", "/css/**", "/**/favicon.ico");
+    }
+
+    //    /* Commented out - session usage replaced with JWT token auth. */
 //    @Bean
 //    HeaderHttpSessionStrategy sessionStrategy() {
 //        return new HeaderHttpSessionStrategy();

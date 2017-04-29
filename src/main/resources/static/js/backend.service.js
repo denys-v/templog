@@ -11,7 +11,7 @@
         };
 
         this.getLogs = function(fromDate, toDate) {
-            return $http.get('/templog/logs1', {params: {fromDate: fromDate, toDate: toDate}}).then(
+            return $http.get('/templog/logs3', {params: {fromDate: fromDate, toDate: toDate}}).then(
                 function success(response) {
                     var logs = [];
                     _.forEach(response.data, function (logDto) {

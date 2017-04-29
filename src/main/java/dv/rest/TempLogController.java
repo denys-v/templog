@@ -2,6 +2,7 @@ package dv.rest;
 
 import dv.dao.TempLogRepository;
 import dv.dto.TempLogDTO;
+import dv.dto.TempLogProjection;
 import dv.model.TempLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -61,5 +62,25 @@ public class TempLogController {
                 .forEach(tempLog -> logsDto.add(TempLogDTO.fromTempLog(tempLog)));
 
         return logsDto;
+    }
+
+    @RequestMapping(value = "/logs2", method = RequestMethod.GET)
+    public List<TempLogProjection> getLogs2(@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") Date fromDate,
+                                     @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") Date toDate) {
+        log.info("Temperature logs requested (parsed): from: {} to: {}", fromDate, toDate);
+
+        List<TempLogProjection> logs = this.tempLogRepository.findProjectionByTakenAtBetweenOrderByTakenAtAsc(fromDate, toDate);
+
+        return logs;
+    }
+
+    @RequestMapping(value = "/logs3", method = RequestMethod.GET)
+    public List<TempLogDTO> getLogs3(@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") Date fromDate,
+                                            @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") Date toDate) {
+        log.info("Temperature logs requested (parsed): from: {} to: {}", fromDate, toDate);
+
+        List<TempLogDTO> logs = this.tempLogRepository.findDtoByTakenAtBetweenOrderByTakenAtAsc(fromDate, toDate);
+
+        return logs;
     }
 }

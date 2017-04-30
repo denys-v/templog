@@ -25,6 +25,7 @@
 		<hibernate.version>5.2.9.Final</hibernate.version>
 		<hibernate-validator.version>5.4.1.Final</hibernate-validator.version>
 		<flyway.version>4.1.2</flyway.version>
+		<assertj.version>3.6.2</assertj.version>
 	</properties>
 
 	<dependencies>

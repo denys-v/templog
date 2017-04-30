@@ -6,8 +6,7 @@ import org.junit.Test;
 import java.math.BigDecimal;
 import java.util.Date;
 
-import static org.hamcrest.Matchers.equalTo;
-import static org.junit.Assert.assertThat;
+import static org.assertj.core.api.Assertions.assertThat;
 
 public class TempLogDTOTest {
 
@@ -20,8 +19,8 @@ public class TempLogDTOTest {
         // when
         TempLog tl = dto.toTempLog();
         // then
-        assertThat(tl.getTemperature(), equalTo(dto.getTemperature()));
-        assertThat(tl.getTakenAt(), equalTo(dto.getTakenAt()));
+        assertThat(tl.getTemperature()).isEqualByComparingTo(dto.getTemperature());
+        assertThat(tl.getTakenAt()).isEqualTo(dto.getTakenAt());
     }
 
     @Test
@@ -33,8 +32,8 @@ public class TempLogDTOTest {
         // when
         TempLogDTO dto = TempLogDTO.fromTempLog(tl);
         // then
-        assertThat(dto.getTemperature(), equalTo(tl.getTemperature()));
-        assertThat(dto.getTakenAt(), equalTo(tl.getTakenAt()));
+        assertThat(dto.getTemperature()).isEqualByComparingTo(tl.getTemperature());
+        assertThat(dto.getTakenAt()).isEqualTo(tl.getTakenAt());
     }
 
 }

@@ -2,9 +2,11 @@ package dv.rest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dv.dao.TempLogRepository;
+import dv.model.TempLog;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,13 +19,18 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.test.web.servlet.RequestBuilder;
+import org.springframework.test.web.servlet.ResultActions;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.time.OffsetDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
 import java.util.HashMap;
 
 import static java.lang.String.format;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
@@ -62,17 +69,28 @@ public class TempLogControllerTest {
     @Test
     @WithMockUser(roles = {"WRITER"})
     public void submitLog() throws Exception {
-        HashMap<String, String> contentMap = new HashMap<>();
-        contentMap.put("temperature", "36.6");
-        contentMap.put("takenAt", OffsetDateTime.now().minusDays(1).format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+        // given
+        BigDecimal temperature = new BigDecimal("36.6");
+        OffsetDateTime takenAt = OffsetDateTime.now().minusDays(1);
 
-        RequestBuilder requestBuilder = post("/templog/submit")
+        HashMap<String, String> contentMap = new HashMap<>();
+        contentMap.put("temperature", temperature.toString());
+        contentMap.put("takenAt", takenAt.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+
+        // when
+        RequestBuilder request = post("/templog/submit")
                 .content(objectMapper.writeValueAsString(contentMap))
                 .contentType(MediaType.APPLICATION_JSON);
 
-        MvcResult mvcResult = mvc.perform(requestBuilder)
-                .andExpect(status().isOk())
-                .andReturn();
+        ResultActions result = mvc.perform(request);
+
+        // then
+        result.andExpect(status().isOk());
+
+        ArgumentCaptor<TempLog> tempLogCaptor = ArgumentCaptor.forClass(TempLog.class);
+        verify(tempLogRepo).save(tempLogCaptor.capture());
+        assertThat(tempLogCaptor.getValue().getTemperature()).isEqualByComparingTo(temperature);
+        assertThat(tempLogCaptor.getValue().getTakenAt()).isEqualTo(Date.from(takenAt.toInstant()));
     }
 
     @Test

@@ -39,8 +39,12 @@ public class TempLogController {
     }
 
     @RequestMapping(value = "/logs/{fromDate}/{toDate}", method = RequestMethod.GET)
-    public List<TempLogDTO> getLogs(@PathVariable("fromDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime fromDate,
-                                    @PathVariable("toDate") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME) OffsetDateTime toDate) {
+    public List<TempLogDTO> getLogs(@PathVariable("fromDate")
+                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                            OffsetDateTime fromDate,
+                                    @PathVariable("toDate")
+                                    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                                            OffsetDateTime toDate) {
         log.info("Temperature logs requested (parsed): from: {} to: {}", fromDate, toDate);
 
         ArrayList<TempLogDTO> logs = new ArrayList<>();
@@ -53,8 +57,12 @@ public class TempLogController {
     }
 
     @RequestMapping(value = "/logs1", method = RequestMethod.GET)
-    public List<TempLogDTO> getLogs1(@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") Date fromDate,
-                                    @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") Date toDate) {
+    public List<TempLogDTO> getLogs1(@RequestParam("fromDate")
+                                     @DateTimeFormat(pattern = TempLogDTO.DATE_TIME_FORMAT)
+                                             Date fromDate,
+                                     @RequestParam("toDate")
+                                     @DateTimeFormat(pattern = TempLogDTO.DATE_TIME_FORMAT)
+                                             Date toDate) {
         log.info("Temperature logs requested (parsed): from: {} to: {}", fromDate, toDate);
 
         ArrayList<TempLogDTO> logsDto = new ArrayList<>();
@@ -65,8 +73,12 @@ public class TempLogController {
     }
 
     @RequestMapping(value = "/logs2", method = RequestMethod.GET)
-    public List<TempLogProjection> getLogs2(@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") Date fromDate,
-                                     @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") Date toDate) {
+    public List<TempLogProjection> getLogs2(@RequestParam("fromDate")
+                                            @DateTimeFormat(pattern = TempLogDTO.DATE_TIME_FORMAT)
+                                                    Date fromDate,
+                                            @RequestParam("toDate")
+                                            @DateTimeFormat(pattern = TempLogDTO.DATE_TIME_FORMAT)
+                                                    Date toDate) {
         log.info("Temperature logs requested (parsed): from: {} to: {}", fromDate, toDate);
 
         List<TempLogProjection> logs = this.tempLogRepository.findProjectionByTakenAtBetweenOrderByTakenAtAsc(fromDate, toDate);
@@ -75,8 +87,12 @@ public class TempLogController {
     }
 
     @RequestMapping(value = "/logs3", method = RequestMethod.GET)
-    public List<TempLogDTO> getLogs3(@RequestParam("fromDate") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") Date fromDate,
-                                            @RequestParam("toDate") @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX") Date toDate) {
+    public List<TempLogDTO> getLogs3(@RequestParam("fromDate")
+                                     @DateTimeFormat(pattern = TempLogDTO.DATE_TIME_FORMAT)
+                                             Date fromDate,
+                                     @RequestParam("toDate")
+                                     @DateTimeFormat(pattern = TempLogDTO.DATE_TIME_FORMAT)
+                                             Date toDate) {
         log.info("Temperature logs requested (parsed): from: {} to: {}", fromDate, toDate);
 
         List<TempLogDTO> logs = this.tempLogRepository.findDtoByTakenAtBetweenOrderByTakenAtAsc(fromDate, toDate);

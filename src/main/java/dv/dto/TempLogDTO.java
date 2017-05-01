@@ -8,9 +8,11 @@ import java.util.Date;
 
 public class TempLogDTO {
 
+    public static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";
+
     private BigDecimal temperature;
 
-    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
+    @JsonFormat(pattern = DATE_TIME_FORMAT)
     private Date takenAt;
 
     public TempLogDTO() {

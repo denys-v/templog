@@ -3,9 +3,7 @@ package dv.util.spring.security;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.stereotype.Component;
 
-@Component
 public class AuthTokenUtil {
 
     static class AuthTokenException extends Exception {

@@ -3,13 +3,11 @@ package dv.util.spring.security;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import javax.servlet.FilterChain;
@@ -18,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-@Component
 public class AuthTokenFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(AuthTokenFilter.class);
@@ -26,8 +23,13 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     @Value("${dv.auth.token.header}")
     private String authTokenHeader;
 
-    private AuthTokenUtil authTokenUtil;
-    private UserDetailsService userDetailsService;
+    private final AuthTokenUtil authTokenUtil;
+    private final UserDetailsService userDetailsService;
+
+    public AuthTokenFilter(AuthTokenUtil authTokenUtil, UserDetailsService userDetailsService) {
+        this.authTokenUtil = authTokenUtil;
+        this.userDetailsService = userDetailsService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
@@ -52,15 +54,5 @@ public class AuthTokenFilter extends OncePerRequestFilter {
         }
 
         filterChain.doFilter(request, response);
-    }
-
-    @Autowired
-    public void setAuthTokenUtil(AuthTokenUtil authTokenUtil) {
-        this.authTokenUtil = authTokenUtil;
-    }
-
-    @Autowired
-    void setUserDetailsService(UserDetailsService userDetailsService) {
-        this.userDetailsService = userDetailsService;
     }
 }

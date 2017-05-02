@@ -1,9 +1,10 @@
 package dv.config;
 
+import dv.dao.UserRepository;
+import dv.model.Role;
 import dv.util.spring.security.AuthTokenFilter;
 import dv.util.spring.security.AuthTokenUtil;
 import dv.util.spring.security.SimpleUserDetailsService;
-import dv.model.Role;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -28,21 +29,17 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Value("${dv.auth.token.header}")
     private String authTokenHeader;
 
-    private final AuthTokenFilter authTokenFilter;
-    private final AuthTokenUtil authTokenUtil;
-    private final SimpleUserDetailsService simpleUserDetailsService;
-
-    @Autowired
-    public WebSecurityConfig(AuthTokenFilter authTokenFilter, AuthTokenUtil authTokenUtil, SimpleUserDetailsService simpleUserDetailsService) {
-        this.authTokenFilter = authTokenFilter;
-        this.authTokenUtil = authTokenUtil;
-        this.simpleUserDetailsService = simpleUserDetailsService;
-    }
-
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(simpleUserDetailsService)
+        auth.userDetailsService(simpleUserDetailsService())
                 .passwordEncoder(passwordEncoder());
+    }
+
+    @Bean
+    SimpleUserDetailsService simpleUserDetailsService() {
+        UserRepository userRepo = this.getApplicationContext().getBean(UserRepository.class);
+
+        return new SimpleUserDetailsService(userRepo);
     }
 
     @Bean
@@ -58,7 +55,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
         http.formLogin()
                 .successHandler((request, response, authentication) -> {
-                    String token = authTokenUtil.buildToken(authentication.getName());
+                    String token = authTokenUtil().buildToken(authentication.getName());
                     response.setHeader(this.authTokenHeader, token);
                 })
                 .failureHandler((request, response, exception) -> {
@@ -83,7 +80,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable();
 //                .csrfTokenRepository(CookieCsrfTokenRepository.withHttpOnlyFalse());
 
-        http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(authTokenFilter(), UsernamePasswordAuthenticationFilter.class);
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
     }
@@ -91,6 +88,16 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) throws Exception {
         web.ignoring().antMatchers("/**/*.html", "/js/**", "/css/**", "/**/favicon.ico");
+    }
+
+    @Bean
+    AuthTokenUtil authTokenUtil() {
+        return new AuthTokenUtil();
+    }
+
+    @Bean
+    AuthTokenFilter authTokenFilter() {
+        return new AuthTokenFilter(authTokenUtil(), simpleUserDetailsService());
     }
 
     //    /* Commented out - session usage replaced with JWT token auth. */

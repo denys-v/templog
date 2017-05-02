@@ -20,6 +20,14 @@ public class TempLog {
     @Column(name = "taken_at", nullable = false)
     private Date takenAt;
 
+    public TempLog() {
+    }
+
+    public TempLog(BigDecimal temperature, Date takenAt) {
+        this.temperature = temperature;
+        this.takenAt = takenAt;
+    }
+
     public Long getId() {
         return id;
     }

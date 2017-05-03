@@ -19,6 +19,7 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.ComponentScan.Filter;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
@@ -101,6 +102,50 @@ public class TempLogControllerTest {
         verify(tempLogRepo).save(tempLogCaptor.capture());
         assertThat(tempLogCaptor.getValue().getTemperature()).isEqualByComparingTo(temperature);
         assertThat(tempLogCaptor.getValue().getTakenAt()).isEqualTo(Date.from(takenAt.toInstant()));
+    }
+
+    @Test
+    @WithAnonymousUser
+    public void shouldRejectSubmitForUnauthenticatedUser() throws Exception {
+        // given
+        BigDecimal temperature = new BigDecimal("36.6");
+        OffsetDateTime takenAt = OffsetDateTime.now().minusDays(1);
+
+        HashMap<String, String> contentMap = new HashMap<>();
+        contentMap.put("temperature", temperature.toString());
+        contentMap.put("takenAt", takenAt.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+
+        // when
+        RequestBuilder request = post("/templog/submit")
+                .content(objectMapper.writeValueAsString(contentMap))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        ResultActions resultActions = mvc.perform(request);
+
+        // then
+        resultActions.andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    @WithMockUser(roles = "READER")
+    public void shouldRejectSubmitForUnauthorizedUser() throws Exception {
+        // given
+        BigDecimal temperature = new BigDecimal("36.6");
+        OffsetDateTime takenAt = OffsetDateTime.now().minusDays(1);
+
+        HashMap<String, String> contentMap = new HashMap<>();
+        contentMap.put("temperature", temperature.toString());
+        contentMap.put("takenAt", takenAt.format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+
+        // when
+        RequestBuilder request = post("/templog/submit")
+                .content(objectMapper.writeValueAsString(contentMap))
+                .contentType(MediaType.APPLICATION_JSON);
+
+        ResultActions resultActions = mvc.perform(request);
+
+        // then
+        resultActions.andExpect(status().isForbidden());
     }
 
     @Test

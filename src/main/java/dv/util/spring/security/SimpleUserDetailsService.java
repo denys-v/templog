@@ -21,6 +21,10 @@ public class SimpleUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepo.findByUsername(username);
 
+        if (user == null) {
+            throw new UsernameNotFoundException("No user found for the username provided: " + username);
+        }
+
         return new SimpleUserDetails(
                 user.getUsername(),
                 user.getPassword(),

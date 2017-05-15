@@ -6,6 +6,10 @@ import dv.model.TempLog;
 import java.math.BigDecimal;
 import java.util.Date;
 
+/**
+ * DTO for returning temperature logs to clients, as well as presenting new log entry to be added.
+ * Serialized/deserialized to/from JSON by Jackson.
+ */
 public class TempLogDTO {
 
     public static final String DATE_TIME_FORMAT = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX";

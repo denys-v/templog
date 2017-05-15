@@ -16,6 +16,15 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * RestController with endpoints for submitting temperature logs and obtaining list of temperature logs
+ * within date interval. <br>
+ * Logic for obtaining list of logs is implemented via 3 different techniques (for demo purposes): <br>
+ * - standard entity loading; <br>
+ * - projection loading (Spring Data projections); <br>
+ * - DTO object loading (JPA constructor expressions). <br>
+ * (See {@link TempLogRepository} for details).
+ */
 @RestController
 @RequestMapping("/templog")
 public class TempLogController {
@@ -29,6 +38,11 @@ public class TempLogController {
         this.tempLogRepository = tempLogRepository;
     }
 
+    /**
+     * Endpoint for adding new temperature log.
+     *
+     * @param dto representation of temperature log entry.
+     */
     @RequestMapping(value = "/submit", method = RequestMethod.POST)
     public void submitLog(@RequestBody TempLogDTO dto) {
         log.info("Temperature log submitted: temperature: {} takenAt: {}", dto.getTemperature(), dto.getTakenAt());
@@ -38,6 +52,13 @@ public class TempLogController {
         tempLogRepository.save(log);
     }
 
+    /**
+     * Stub method for testing purposes (to be removed soon).
+     *
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
     @RequestMapping(value = "/logs/{fromDate}/{toDate}", method = RequestMethod.GET)
     public List<TempLogDTO> getLogs(@PathVariable("fromDate")
                                     @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
@@ -56,6 +77,13 @@ public class TempLogController {
         return logs;
     }
 
+    /**
+     * Endpoint to load temperature logs via standard entity loading technique.
+     *
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
     @RequestMapping(value = "/logs1", method = RequestMethod.GET)
     public List<TempLogDTO> getLogs1(@RequestParam("fromDate")
                                      @DateTimeFormat(pattern = TempLogDTO.DATE_TIME_FORMAT)
@@ -72,6 +100,13 @@ public class TempLogController {
         return logsDto;
     }
 
+    /**
+     * Endpoint to load temperature logs via Spring Data projections.
+     *
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
     @RequestMapping(value = "/logs2", method = RequestMethod.GET)
     public List<TempLogProjection> getLogs2(@RequestParam("fromDate")
                                             @DateTimeFormat(pattern = TempLogDTO.DATE_TIME_FORMAT)
@@ -86,6 +121,13 @@ public class TempLogController {
         return logs;
     }
 
+    /**
+     * Endpoint to load temperature logs as DTO objects via JPA constructor expressions.
+     *
+     * @param fromDate
+     * @param toDate
+     * @return
+     */
     @RequestMapping(value = "/logs3", method = RequestMethod.GET)
     public List<TempLogDTO> getLogs3(@RequestParam("fromDate")
                                      @DateTimeFormat(pattern = TempLogDTO.DATE_TIME_FORMAT)

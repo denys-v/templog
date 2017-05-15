@@ -10,6 +10,13 @@ import org.springframework.stereotype.Repository;
 import java.util.Date;
 import java.util.List;
 
+/**
+ * Repository component to load temperature logs within specified date interval. <br>
+ * All three methods provide the same business function, though via different techniques: <br>
+ * - standard entity loading; <br>
+ * - projection loading (Spring Data projections); <br>
+ * - DTO object loading (JPA constructor expressions).
+ */
 @Repository
 public interface TempLogRepository extends CrudRepository<TempLog, Long> {
 

@@ -17,6 +17,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 
+/**
+ * Filter for logging request details (for debugging purposes).
+ */
 public class CustomRequestLoggingFilter extends AbstractRequestLoggingFilter {
 
     private ArrayList<String> includedHeaders = new ArrayList<>();

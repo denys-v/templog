@@ -99,7 +99,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     AuthTokenFilter authTokenFilter() {
-        return new AuthTokenFilter(authTokenUtil(), simpleUserDetailsService());
+        return new AuthTokenFilter(authTokenHeader, authTokenUtil(), simpleUserDetailsService());
     }
 
     //    /* Commented out - session usage replaced with JWT token auth. */

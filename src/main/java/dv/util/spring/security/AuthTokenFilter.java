@@ -3,7 +3,6 @@ package dv.util.spring.security;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,17 +15,22 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
+/**
+ * A filter to check if the request contains a header with authentication token - then validate the token,
+ * find corresponding user and initialize SecurityContext accordingly.
+ * If the token provided is invalid - respond with HTTP 401 (Unauthorized) status.
+ * If no token provided - simply pass through to filter chain.
+ */
 public class AuthTokenFilter extends OncePerRequestFilter {
 
     private static final Logger log = LoggerFactory.getLogger(AuthTokenFilter.class);
 
-    @Value("${dv.auth.token.header}")
-    private String authTokenHeader;
-
+    private final String authTokenHeader;
     private final AuthTokenUtil authTokenUtil;
     private final UserDetailsService userDetailsService;
 
-    public AuthTokenFilter(AuthTokenUtil authTokenUtil, UserDetailsService userDetailsService) {
+    public AuthTokenFilter(String authTokenHeader, AuthTokenUtil authTokenUtil, UserDetailsService userDetailsService) {
+        this.authTokenHeader = authTokenHeader;
         this.authTokenUtil = authTokenUtil;
         this.userDetailsService = userDetailsService;
     }

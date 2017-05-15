@@ -21,7 +21,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import javax.servlet.http.HttpServletResponse;
 
 @EnableWebSecurity
-//@RestController
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     private static final int BCRYPT_STRENGTH = 11;
@@ -65,7 +64,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 });
 
         http.logout()
-                .logoutSuccessHandler((request, response, authentication) -> {}); //.logoutSuccessUrl("/after_logout")
+                .logoutSuccessHandler((request, response, authentication) -> {});
 
         http.exceptionHandling()
                 .authenticationEntryPoint((request, response, authException) -> {
@@ -101,20 +100,4 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     AuthTokenFilter authTokenFilter() {
         return new AuthTokenFilter(authTokenHeader, authTokenUtil(), simpleUserDetailsService());
     }
-
-    //    /* Commented out - session usage replaced with JWT token auth. */
-//    @Bean
-//    HeaderHttpSessionStrategy sessionStrategy() {
-//        return new HeaderHttpSessionStrategy();
-//    }
-//
-//    @GetMapping("/user_login")
-//    public Map<String, String> userLogin(HttpSession session) {
-//        return Collections.singletonMap("token", session.getId());
-//    }
-//
-//    @RequestMapping(path = "/after_logout", method = RequestMethod.HEAD)
-//    public void afterLogout() {
-//         // no actions
-//    }
 }

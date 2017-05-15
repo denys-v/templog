@@ -28,6 +28,8 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Value("${dv.auth.token.header}")
     private String authTokenHeader;
+    @Value("${dv.auth.token.secret}")
+    private String authTokenSecret;
 
     @Autowired
     public void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
@@ -92,7 +94,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     AuthTokenUtil authTokenUtil() {
-        return new AuthTokenUtil();
+        return new AuthTokenUtil(authTokenSecret);
     }
 
     @Bean

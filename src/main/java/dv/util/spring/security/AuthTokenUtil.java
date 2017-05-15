@@ -2,8 +2,10 @@ package dv.util.spring.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.beans.factory.annotation.Value;
 
+/**
+ * Utility class to compute and verify user authentication tokens (JWT-based).
+ */
 public class AuthTokenUtil {
 
     static class AuthTokenException extends Exception {
@@ -13,9 +15,23 @@ public class AuthTokenUtil {
         }
     }
 
-    @Value("${dv.auth.token.secret}")
-    private String authTokenSecret;
+    private final String authTokenSecret;
 
+    /**
+     * A constructor.
+     *
+     * @param authTokenSecret BASE64-encoded secret key to be used when creating auth tokens.
+     */
+    public AuthTokenUtil(String authTokenSecret) {
+        this.authTokenSecret = authTokenSecret;
+    }
+
+    /**
+     * Creates JWT-based auth token and weaves specified username into it.
+     *
+     * @param username to be encoded within a token.
+     * @return the token.
+     */
     public String buildToken(String username) {
         return Jwts.builder()
                 .setSubject(username)
@@ -23,6 +39,13 @@ public class AuthTokenUtil {
                 .compact();
     }
 
+    /**
+     * Verifies auth token and extracts username form it.
+     *
+     * @param token a token created via {@code buildToken} method.
+     * @return extracted username (if the token is valid).
+     * @throws AuthTokenException if the token can't be parsed successfully.
+     */
     public String usernameFromToken(String token) throws AuthTokenException {
         try {
             return Jwts.parser()
